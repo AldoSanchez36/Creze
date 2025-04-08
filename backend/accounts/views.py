@@ -10,6 +10,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django_otp.plugins.otp_totp.models import TOTPDevice
+from rest_framework_simplejwt.tokens import RefreshToken
 import base64
 import qrcode
 from io import BytesIO
@@ -46,20 +47,28 @@ def login_view(request):
 
         user = authenticate(username=username, password=password)
         if user:
-            # Temporarily login the user so django_otp can access OTP devices
-            login(request, user)
+            refresh = RefreshToken.for_user(user)
+            token = str(refresh.access_token)
 
-            for device in devices_for_user(user):
-                if device.verify_token(otp_token):
-                    return JsonResponse({'status': 'logged_in_with_mfa'})
-            
-            # If user has OTP devices but no valid token provided
-            if any(devices_for_user(user)):
-                logout(request)
+            # Check for OTP devices
+            otp_devices = list(devices_for_user(user))
+            if otp_devices:
+                for device in otp_devices:
+                    if device.verify_token(otp_token):
+                        login(request, user)
+                        return JsonResponse({
+                            'status': 'logged_in_with_mfa',
+                            'token': token,
+                            'email': user.email
+                        })
                 return JsonResponse({'status': 'mfa_required_or_invalid_token'}, status=401)
-
-            # If no MFA is set up, proceed
-            return JsonResponse({'status': 'logged_in_without_mfa'})
+            else:
+                login(request, user)
+                return JsonResponse({
+                    'status': 'logged_in_without_mfa',
+                    'token': token,
+                    'email': user.email
+                })
         else:
             return JsonResponse({'status': 'invalid_credentials'}, status=401)
 

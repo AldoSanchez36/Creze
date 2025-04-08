@@ -10,7 +10,7 @@ const MfaSetup = () => {
   useEffect(() => {
     const fetchQrCode = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/auth/enable_mfa/", {
+        const response = await axios.get("/auth/enable_mfa/", {
           withCredentials: true,
         });
 

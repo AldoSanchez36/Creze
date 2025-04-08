@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
-  const userEmail = localStorage.getItem('userEmail');
+  const userEmail = localStorage.getItem('email');
   const navigate = useNavigate();
 
   React.useEffect(() => {
