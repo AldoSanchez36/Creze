@@ -16,10 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from two_factor.urls import urlpatterns as tf_urls
+from django.http import JsonResponse
+
+def health_check(request):
+    return JsonResponse({"status": "Backend running"})
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('accounts.urls')),
-    path('', include(tf_urls)),
-]
+    path('', health_check),
+] 

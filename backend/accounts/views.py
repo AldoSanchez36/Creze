@@ -10,6 +10,9 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django_otp.plugins.otp_totp.models import TOTPDevice
+import base64
+import qrcode
+from io import BytesIO
 
 
 @csrf_exempt
@@ -87,3 +90,27 @@ def confirm_mfa(request):
             return JsonResponse({'status': 'mfa_confirmed'})
         else:
             return JsonResponse({'error': 'Invalid OTP token'}, status=400)
+
+@csrf_exempt
+@login_required
+def enable_mfa(request):
+    user = request.user
+
+    # Check if device already exists and is confirmed
+    if TOTPDevice.objects.filter(user=user, confirmed=True).exists():
+        return JsonResponse({'error': 'MFA already enabled'}, status=400)
+
+    # Create or get an unconfirmed device
+    device, created = TOTPDevice.objects.get_or_create(user=user, confirmed=False, name="default")
+
+    # Generate QR code for the TOTP URI
+    otp_uri = device.config_url
+    qr = qrcode.make(otp_uri)
+    buffered = BytesIO()
+    qr.save(buffered, format="PNG")
+    qr_code_base64 = base64.b64encode(buffered.getvalue()).decode()
+
+    return JsonResponse({
+        'otp_uri': otp_uri,
+        'qr_code_base64': qr_code_base64
+    })

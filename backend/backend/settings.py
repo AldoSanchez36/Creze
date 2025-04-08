@@ -45,10 +45,14 @@ INSTALLED_APPS = [
     'django_otp.plugins.otp_static',  # Plugin for static OTP tokens
     # 'django_otp.plugins.otp_email',  # Plugin to send OTP codes via email
     'two_factor',  # App to handle two-factor authentication workflows
-
+    #cors
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    #Cores
+    'corsheaders.middleware.CorsMiddleware',
+    # Default middleware
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -61,6 +65,12 @@ MIDDLEWARE = [
     # Middleware to manage two-factor authentication processes
     'two_factor.middleware.threadlocals.ThreadLocals',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",  # React local
+#     "https://tudominio.com",  # Deploy production
+# ]
 
 ROOT_URLCONF = 'backend.urls'
 

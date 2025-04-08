@@ -1,0 +1,153 @@
+/* Home.css */
+
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f0f0f0; /* Light gray background */
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .ribbon {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #007bff; /* Ribbon background color */
+    padding: 0px 40px;
+    color: #fff; /* Ribbon text color */
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Ensure it stays on top */
+  }
+  
+  .ribbon-button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    margin: 0 15px;
+    transition: opacity 0.3s ease;
+  }
+  
+  .ribbon-button:hover {
+    opacity: 0.8;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-top: 80px; /* Adjust to account for the ribbon height */
+    margin-bottom: 30px;
+  }
+  
+  .button-container button {
+    margin-bottom: 10px;
+    width: 150px;
+  }
+  
+  .button {
+    padding: 15px 30px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .report-button {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .layouts-button {
+    background-color: #28a745;
+    color: #fff;
+  }
+  
+  .button:hover {
+    opacity: 0.9;
+  }
+  
+  .options-container {
+    margin-top: 30px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    width: 300px;
+    text-align: left;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  select, input[type="checkbox"] {
+    margin-right: 10px;
+  }
+  
+  .generate-button {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .date-display {
+    font-size: 14px;
+    color: #fff;
+    margin-right: 30px; /* Add some spacing before the profile button */
+    text-align: center;
+    white-space: nowrap;
+    align-self: center;
+  }
+
+  .reports-table-container {
+    flex: 1; /* Take available space */
+    margin-right: 20px; /* Add space between table and buttons */
+  }
+
+  .reports-table-container h2 {
+    margin-bottom: 10px;
+  }
+
+  .reports-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+
+  .reports-table th, .reports-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  .reports-table th {
+    background-color: #007bff;
+    color: white;
+  }
+
+  .reports-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  .reports-table tr:hover {
+    background-color: #ddd;
+  }
+
+  .home-content {
+    display: flex; /* Make table and buttons side by side */
+    justify-content: space-between;
+    align-items: flex-start; /* Align items at the top */
+    margin-top: 20px; /* Add some space from the ribbon */
+  }

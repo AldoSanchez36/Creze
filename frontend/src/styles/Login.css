@@ -1,0 +1,101 @@
+/* Estilos generales */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Contenedor principal que centra el contenido */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(to right, #7f7fd5, #86a8e7, #91eae4);
+}
+
+/* Tarjeta del formulario de login */
+.login-card {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+/* Título del formulario */
+.login-card h1 {
+  margin-bottom: 1.5rem;
+  color: #333333;
+}
+
+/* Grupo de inputs */
+.input-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+/* Etiquetas de los inputs */
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555555;
+}
+
+/* Campos de entrada de texto */
+.input-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Botón principal de login */
+button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: #ffffff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Opciones adicionales debajo del botón principal */
+.login-options {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.login-options button {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.9rem;
+  transition: color 0.3s;
+}
+
+.login-options button:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
