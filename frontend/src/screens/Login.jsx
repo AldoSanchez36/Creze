@@ -38,7 +38,15 @@ const Login = () => {
   
       } catch (error) {
         if (error.response) {
-          alert(error.response.data.msg || translations.invalidCredentials);
+          const status = error.response.data.status;
+          const token = error.response.data.token;
+      
+          if (status === 'mfa_required_or_invalid_token') {
+            setMfaRequired(true);
+            setSessionToken(token);
+          } else {
+            alert(error.response.data.msg || translations.invalidCredentials);
+          }
         } else {
           console.error('Error en la solicitud:', error);
           alert(translations.serverError || 'Server error');
@@ -57,13 +65,7 @@ const Login = () => {
           <select
             onChange={(e) => changeLanguage(e.target.value)}
             defaultValue="en"
-            style={{
-              padding: '4px',
-              border: 'none',
-              background: 'transparent',
-              cursor: 'pointer',
-              fontSize: '14px'
-            }}
+            style={{padding: '4px',border: 'none',background: 'transparent',cursor: 'pointer',fontSize: '14px' }}
           >
             <option value="en" style={{height:'15px'}}>En</option>
             <option value="es" style={{height:'15px'}}>Es</option>
@@ -110,6 +112,7 @@ const Login = () => {
               value={otpToken}
               onChange={(e) => setOtpToken(e.target.value)}
               placeholder="123456"
+              style={{ margin: '10px', padding: '5px', height: '30px'}}
             />
             <button
               type="button"
