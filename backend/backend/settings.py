@@ -40,18 +40,19 @@ INSTALLED_APPS = [
     # Other apps
     'accounts',
     # Third-party apps for OTP and two-factor authentication
+    'corsheaders',#cors
+    'axes',#axes for brute force protection
     'django_otp',
     'django_otp.plugins.otp_totp',  # Plugin for time-based one-time passwords
     'django_otp.plugins.otp_static',  # Plugin for static OTP tokens
     # 'django_otp.plugins.otp_email',  # Plugin to send OTP codes via email
     'two_factor',  # App to handle two-factor authentication workflows
-    #cors
-    'corsheaders',
 ]
+# Django extensions for development
+INSTALLED_APPS += ['django_extensions']
 
 MIDDLEWARE = [
-    #Cores
-    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',#Cores
     # Default middleware
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -64,13 +65,18 @@ MIDDLEWARE = [
     'django_otp.middleware.OTPMiddleware',
     # Middleware to manage two-factor authentication processes
     'two_factor.middleware.threadlocals.ThreadLocals',
+    # Middleware for brute force protection
+    'axes.middleware.AxesMiddleware',
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = False   # ['https://yourdomain.com'] # production
 # CORS_ALLOWED_ORIGINS = [
 #     "http://localhost:3000",  # React local
 #     "https://tudominio.com",  # Deploy production
 # ]
+CORS_ALLOWED_ORIGINS = ["https://localhost:3000"]
+CORS_ALLOW_CREDENTIALS = True
+
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -163,3 +169,18 @@ REST_FRAMEWORK = {
 }
 
 LOGIN_URL = '/auth/login/'
+
+# Limit to 10 failures, 1 hour lockout
+AXES_FAILURE_LIMIT = 10
+AXES_COOLOFF_TIME = 3600  # seconds
+# AXES_LOCKOUT_CALLABLE = 'axes.handlers.lockout.get_lockout_response'
+AXES_COOLOFF_MESSAGE = "Too many failed logins."
+
+AUTHENTICATION_BACKENDS = [
+    'axes.backends.AxesStandaloneBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+# CSRF & cookies
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True

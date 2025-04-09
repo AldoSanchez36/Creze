@@ -46,7 +46,8 @@ def login_view(request):
         password = data.get('password')
         otp_token = data.get('otp_token')  # Might be None
 
-        user = authenticate(username=username, password=password)
+        # user = authenticate(username=username, password=password)
+        user = authenticate(request, username=username, password=password)# Pass request into authenticate so django-axes can track attempts
         if user:
             refresh = RefreshToken.for_user(user)
             token = str(refresh.access_token)
