@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
-  const userEmail = localStorage.getItem('email');
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -26,7 +25,7 @@ const Home = () => {
       </div>
       <div style={{ textAlign: 'center', paddingTop: '100px' }}>
         <h1>Home Page</h1>
-        <h2>Welcome {userEmail || 'Guest'}</h2>
+        <h2>Welcome </h2>
       </div>
     </div>
   );

@@ -99,9 +99,11 @@ const Login = () => {
               placeholder={translations.passwordPlaceholder}
             />
           </div>
-          <button type="button" onClick={handleLogin}>
-            {translations.login}
-          </button>
+          {!mfaRequired && (
+            <button type="button" onClick={handleLogin}>
+              {translations.login}
+            </button>
+          )}
         </form>
         {mfaRequired && (
           <div className="mfa-verification">
