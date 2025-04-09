@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLanguage } from '../screens/Elements/LanguageContext';
+import { useLanguage } from './Elements/LanguageContext';
 import axios from 'axios';
 import '../styles/Login.css'; // Assuming you have a CSS file for styling
 
@@ -9,6 +9,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [mfaRequired, setMfaRequired] = useState(false);
   const [otpToken, setOtpToken] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [sessionToken, setSessionToken] = useState(null);
   const { translations, changeLanguage } = useLanguage();
 
@@ -19,26 +20,28 @@ const Login = () => {
           email,
           password,
         }, { withCredentials: true });
-
+  
         const { status, token } = response.data;
-
+  
         if (status === 'logged_in_without_mfa') {
           localStorage.setItem('token', token);
-          localStorage.setItem('puesto', 'user');
+          window.location.href = '/enable-mfa';
+        } else if (status === 'logged_in_with_mfa') {
+          localStorage.setItem('token', token);
           window.location.href = '/home';
-        } else if (status === 'mfa_required') {
+        } else if (status === 'mfa_required_or_invalid_token') {
           setMfaRequired(true);
-          setSessionToken(token); // temporary session token for MFA
+          setSessionToken(token);
         } else {
           alert(translations.invalidCredentials);
         }
-
+  
       } catch (error) {
         if (error.response) {
           alert(error.response.data.msg || translations.invalidCredentials);
         } else {
           console.error('Error en la solicitud:', error);
-          alert(translations.serverError || 'Error del servidor');
+          alert(translations.serverError || 'Server error');
         }
       }
     } else {
@@ -79,9 +82,15 @@ const Login = () => {
             />
           </div>
           <div className="input-group">
-            <label htmlFor="password">{translations.password}:</label>
+            <label htmlFor="password">{translations.password}:
+              <span className="toggle-password material-icons" 
+                onClick={() => setShowPassword(!showPassword)}
+                style={{position:'relative',top:'7px',left:'2px'}}>
+                  {showPassword ? 'visibility' : 'visibility_off'}
+              </span>
+            </label>
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -106,19 +115,31 @@ const Login = () => {
               type="button"
               onClick={async () => {
                 try {
-                  const mfaResponse = await axios.post(
-                    'http://localhost:8000/auth/verify_mfa/',
-                    { otp_token: otpToken },
+                  const response = await axios.post(
+                    '/auth/login/',
                     {
-                      headers: { Authorization: `Bearer ${sessionToken}` },
+                      email,
+                      password,
+                      otp_token: otpToken,
+                    },
+                    {
                       withCredentials: true,
+                      headers: {
+                        Authorization: `Bearer ${sessionToken}`
+                      }
                     }
                   );
-                  localStorage.setItem('token', mfaResponse.data.token);
-                  localStorage.setItem('puesto', 'user');
-                  window.location.href = '/home';
+
+                  const { status, token } = response.data;
+                  if (status === 'logged_in_with_mfa') {
+                    localStorage.setItem('token', token);
+                    localStorage.setItem('puesto', 'user');
+                    window.location.href = '/home';
+                  } else {
+                    alert(translations.invalidOtp || 'Invalid OTP');
+                  }
                 } catch (err) {
-                  alert("Invalid OTP code");
+                  alert(translations.invalidOtp || 'Invalid OTP');
                 }
               }}
             >

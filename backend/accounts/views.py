@@ -13,8 +13,9 @@ from django_otp.plugins.otp_totp.models import TOTPDevice
 from rest_framework_simplejwt.tokens import RefreshToken
 import base64
 import qrcode
+from qrcode.image.pil import PilImage
 from io import BytesIO
-
+from functools import wraps
 
 @csrf_exempt
 def register(request):
@@ -114,7 +115,7 @@ def enable_mfa(request):
 
     # Generate QR code for the TOTP URI
     otp_uri = device.config_url
-    qr = qrcode.make(otp_uri)
+    qr = qrcode.make(otp_uri, image_factory=PilImage)
     buffered = BytesIO()
     qr.save(buffered, format="PNG")
     qr_code_base64 = base64.b64encode(buffered.getvalue()).decode()
@@ -123,3 +124,13 @@ def enable_mfa(request):
         'otp_uri': otp_uri,
         'qr_code_base64': qr_code_base64
     })
+
+
+
+def login_required_json(view_func):
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return JsonResponse({'error': 'Authentication required'}, status=401)
+        return view_func(request, *args, **kwargs)
+    return _wrapped_view
