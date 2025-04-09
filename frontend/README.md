@@ -1,70 +1,44 @@
-# Getting Started with Create React App
+# Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Relevant Files
 
-## Available Scripts
+- **`package.json`**  
+  - `"proxy": "http://localhost:8000"`  
+  - dependencies: `react`, `react-dom`, `react-router-dom`, `axios`
 
-In the project directory, you can run:
+- **`src/index.js`**  
+  - Renders `<AppRouter />` inside `<BrowserRouter>`
 
-### `npm start`
+- **`src/routers/AppRouter.js`**  
+  - Routes:  
+    - `/login` → `Login.jsx`  
+    - `/register` → `RegisterScreen.jsx`  
+    - `/enable-mfa` → `MfaSetup.jsx` (protected)  
+    - `/home` → `Home.jsx` (protected)  
+  - `<ProtectedRoute>` checks `localStorage.getItem('token')`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **`src/screens/Login.jsx`**  
+  - Login form with email/password and OTP flow  
+  - Axios calls with `withCredentials: true`
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **`src/screens/RegisterScreen.jsx`**  
+  - Registration form, posts to `/auth/register/`
 
-### `npm test`
+- **`src/screens/MfaSetup.jsx`**  
+  - Calls `/auth/enable_mfa/`, displays `qr_code_base64` as QR image
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **`src/screens/Home.jsx`**  
+  - Protected home page after successful MFA
 
-### `npm run build`
+- **`src/screens/Elements/LanguageContext.js`**  
+  - React Context for English/Spanish translations
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **`src/styles/`**  
+  - CSS files for each screen (e.g. `Login.css`, `RegisterScreen.css`, etc.)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Configuration
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- **Axios**: uses proxy in `package.json` for base URL, `withCredentials: true`  
+- **Routing**: React Router v6  
+- **State**: React `useState` and Context API for language  
+- **Build**: `npm run build` for production, `npm start` for development  
