@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django_otp.plugins.otp_static',  # Plugin for static OTP tokens
     # 'django_otp.plugins.otp_email',  # Plugin to send OTP codes via email
     'two_factor',  # App to handle two-factor authentication workflows
+    'django_cryography',  # App to handle cryptographic operations
 ]
 # Django extensions for development
 INSTALLED_APPS += ['django_extensions']
